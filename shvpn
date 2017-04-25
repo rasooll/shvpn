@@ -1,0 +1,51 @@
+#!/bin/bash
+## Scipt name : SHVpn
+## Rasool.SF
+## My E-Mail : safari@rasool.id.ir
+## Version: 1.0-25.04.2017
+username="Your-Username"
+server="Your-Server-Address"
+port="22" #your server ssh port
+pidfile="/tmp/openconnect-pid"
+if [ -f "$pidfile" ];then
+	echo "SHVpn Status : Active"
+	read -p "Mikhay SHVpn ro Disconnect konam ? (Y/N)" disconnect
+	case "$disconnect" in
+		"Y")
+            pid=`cat $pidfile`
+			sudo kill -9 "$pid"
+			sudo rm $pidfile
+            echo "SHVpn Disconnected"
+			zenity  --notification  --text "SHVpn disconnected"
+			sleep 2
+		;;
+		"N")
+			exit
+		;;
+		*)
+			zenity  --notification  --text "Fail"
+			echo "Fail"
+			sleep 2
+	esac
+else
+	echo "SHVpn Status : Inactive"
+	echo "Please waite for 2sec."
+	sleep 2
+	read -p "Mikhay SHVpn ro Connect konam ? (Y/N)" connected
+	case "$connected" in
+		"Y")
+            sudo sshuttle -r "$username"@"$server":"$port" 0.0.0.0/0 --daemon --pidfile="$pidfile"
+            sleep 2
+            echo "Connected to $server server!"
+            zenity  --notification  --text "Connected to $server server!"
+            exit
+        ;;
+		"N")
+			exit
+		;;
+		*)
+			zenity  --notification  --text "Fail"
+			echo "Fail"
+			sleep 2
+	esac
+fi
