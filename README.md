@@ -7,7 +7,7 @@ SHVpn اسکریپتی است که میتواند کل سیستم شما را ا
 <ul dir="rtl">
 <li>ssh</li>
 <li>sshuttle</li>
-<li>zenity</li>
+<li>curl</li>
 </ul>
 </p>
 <p dir="rtl" align="right"><strong>مشخصات سرور:</strong><br />
