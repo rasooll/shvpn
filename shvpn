@@ -2,50 +2,62 @@
 ## Scipt name : SHVpn
 ## Rasool.SF
 ## My E-Mail : safari@rasool.id.ir
-## Version: 1.0-25.04.2017
+## Version: 1.5-27.04.2017
 username="Your-Username"
 server="Your-Server-Address"
 port="22" #your server ssh port
 pidfile="/tmp/openconnect-pid"
+
+if [ "$1" == "--config" ];then
+    ssh-keygen
+    ssh-copy-id -p "$port" "$username"@"$server"
+fi
+
+function connect()
+{
+    sudo sshuttle -r "$username"@"$server":"$port" 0.0.0.0/0 --daemon --pidfile="$pidfile"
+    sleep 2
+    echo "Connected to $server server!"
+    ip=`curl ifconfig.co`
+    echo "Your IP is '$ip'"
+    exit
+}
+
+function disconnect()
+{
+    pid=`cat $pidfile`
+	sudo kill -9 "$pid"
+	sudo rm $pidfile
+    echo "VPN Disconnected"
+	ip=`curl ifconfig.co`
+    echo "Your IP is '$ip'"
+	exit
+}
+
 if [ -f "$pidfile" ];then
-	echo "SHVpn Status : Active"
+	echo "VPN Status : Active"
 	read -p "Mikhay SHVpn ro Disconnect konam ? (Y/N)" disconnect
 	case "$disconnect" in
 		"Y")
-            pid=`cat $pidfile`
-			sudo kill -9 "$pid"
-			sudo rm $pidfile
-            echo "SHVpn Disconnected"
-			zenity  --notification  --text "SHVpn disconnected"
-			sleep 2
+            disconnect
 		;;
-		"N")
-			exit
+		"y")
+			disconnect
 		;;
 		*)
-			zenity  --notification  --text "Fail"
-			echo "Fail"
-			sleep 2
+			exit
 	esac
 else
-	echo "SHVpn Status : Inactive"
-	echo "Please waite for 2sec."
-	sleep 2
+	echo "VPN Status : Inactive"
 	read -p "Mikhay SHVpn ro Connect konam ? (Y/N)" connected
 	case "$connected" in
 		"Y")
-            sudo sshuttle -r "$username"@"$server":"$port" 0.0.0.0/0 --daemon --pidfile="$pidfile"
-            sleep 2
-            echo "Connected to $server server!"
-            zenity  --notification  --text "Connected to $server server!"
-            exit
+            connect
         ;;
-		"N")
-			exit
+		"y")
+			connect
 		;;
 		*)
-			zenity  --notification  --text "Fail"
-			echo "Fail"
-			sleep 2
+			exit
 	esac
 fi
