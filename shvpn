@@ -18,8 +18,8 @@ function connect()
     sudo sshuttle -r "$username"@"$server":"$port" 0.0.0.0/0 --daemon --pidfile="$pidfile"
     sleep 2
     echo "Connected to $server server!"
-    ip=`curl ifconfig.co`
-    echo "Your IP is '$ip'"
+    echo "Your IP is"
+    curl ifconfig.co
     exit
 }
 
@@ -29,8 +29,8 @@ function disconnect()
 	sudo kill -9 "$pid"
 	sudo rm $pidfile
     echo "VPN Disconnected"
-	ip=`curl ifconfig.co`
-    echo "Your IP is '$ip'"
+	echo "Yourt IP is: "
+	curl ifconfig.co
 	exit
 }
 
