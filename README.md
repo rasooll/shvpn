@@ -16,5 +16,6 @@ SHVpn اسکریپتی است که میتواند کل سیستم شما را ا
 <p dir="rtl" align="right"><strong>نحوه ی اجرای اسکریپت:</strong><br />
 <code dir="ltr">$ ./shvpn </code><br />
 برای ساخت SSH Key و ارسال آن به سرور و عدم نیاز به وارد کردن پسورد در زمان اتصال می توان از دستور زیر استفاده کرد<br />
-<code dir="ltr">$ ./shvpn --config</code>
+<code dir="ltr">$ ./shvpn --config</code><br />
+<strong>***</strong> توجه ممکن است این روش سبب افت سرعت گردد.
 </p>
